@@ -1,5 +1,10 @@
 # Simple User CRUD with Node.js, Vanilla JavaScript, and MySQL
 
+![Home](public/img/home.png)
+![Users](public/img/users.png)
+![Delete user](public/img/delete.png)
+![Create user](public/img/create.png)
+
 ## Overview 
 
 This project is a simple Create, Read, Update, Delete (CRUD) application for users built with Node.js and Vanilla JavaScript on the frontend. MySQL is used for data storage and Sequelize is used to perform database queries.
