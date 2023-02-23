@@ -11,7 +11,7 @@
     <div id="app">
         <div class="mainContainer">
             <div class="superior">
-                <h1 class="title">Acutalizacion de Usuarios</h1>
+                <h1 class="title">Actualizacion de Usuarios</h1>
             </div>
             <div class="Main">
                 <form method="post">
@@ -109,12 +109,12 @@
                 }).then((response) => {
                         console.log(response.status)
                         if (response.status == 500) {
-                            throw new Error('Uusario existente');
+                            throw new Error('Usuario existente');
                         }
                         Swal.fire({
                             position: 'top-end',
                             icon: 'success',
-                            title: 'Usuario Creado Exitosamente',
+                            title: 'Usuario actualizado Exitosamente',
                             showConfirmButton: false,
                             timer: 1500,
                         }).then(function () {
