@@ -1,6 +1,6 @@
 # Simple User CRUD with Node.js, Vanilla JavaScript, and MySQL
 
-![Home](public/img/home.png)
+![Home](public/img/index.png)
 ![Users](public/img/users.png)
 ![Delete user](public/img/delete.png)
 ![Create user](public/img/create.png)
