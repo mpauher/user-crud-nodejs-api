@@ -20,7 +20,7 @@ This project is a simple Create, Read, Update, Delete (CRUD) application for use
 
 ## Features
 
-- Creation of new users with fields for name, email, and password.
+- Creation of new users with fields for name, email, and age.
 - Editing of existing users.
 - Deletion of users.
 - Listing of all registered users.
