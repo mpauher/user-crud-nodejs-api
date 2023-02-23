@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Home</title>
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+    integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+</head>
+
+<body>
+  <div id="app">
+  </div>
+  <script>
+    loadData = async () => {
+      const emailsApplicant = await fetch(`/users`, {
+        method: 'get'
+      });
+      infoemails = await emailsApplicant.json();
+      let template = document.querySelector('#app')
+      const principalPart =
+        `
+    <div class="mainContainer">
+      <div class="link">
+        <a href="/">Volver al inicio</a>
+      </div>
+        <div class="superior">
+          <h1>Usuarios</h1>
+        </div>
+        <div class="cuerpo">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Correo Electronico</th>
+                <th>Edad</th>
+                <th>Opciones</th>
+              </tr>
+            </thead>
+            <tbody id="bodyTable">
+    `
+      template.innerHTML = principalPart
+      const bodyTable = document.querySelector('#bodyTable')
+      infoemails.forEach(element => {
+        let data = `
+        <tr>
+          <td>${element.id}</td>
+          <td>${element.name}</td>
+          <td>${element.email}</td>
+          <td>${element.age}</td>
+          <td class="options"><button class="update" id="${element.id}">Actualizar</button> <button class="delete" id="${element.id}">Eliminar</button></td>
+        </tr>
+    `
+        bodyTable.innerHTML += data
+      });
+      const endPart = `
+   
+            </tbody>
+          </table>  
+        </div>
+      </div>
+      
+      `
+
+      template.innerHTML += endPart
+      const deleteButtons = document.querySelectorAll(".delete")
+      const updateButtons = document.querySelectorAll(".update")
+      updateButtons.forEach(element => {
+        element.addEventListener("click", async (e) => {
+          let id = e.target.id
+          location = "./update"
+          localStorage.setItem('id', id)
+        })
+      });
+      //console.log(infoemails);
+
+      deleteButtons.forEach(element => {
+        element.addEventListener("click", async (e) => {
+
+          const newSwal = await Swal.mixin({
+            customClass: {
+              confirmButton: 'btn btn-success',
+              cancelButton: 'btn btn-danger'
+            },
+            buttonsStyling: false
+          })
+
+          const result = await newSwal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'No, cancel!',
+            reverseButtons: true
+          })
+
+          console.log(result.isConfirmed)
+
+          if (result.isConfirmed) {
+            await fetch(`/users/${e.target.id}`, {
+              method: 'delete'
+            });
+            location = "/list"
+          }
+
+          //console.log(e.target.id);
+
+          // if (confirm('Do you want to delete this person?')) {
+          //   await fetch(`/users/${e.target.id}`, {
+          //     method: 'delete'
+          //   });
+          //   location = "/list"
+          // }
+
+        })
+      });
+      //console.log(infoemails);
+    }
+    loadData()
+  </script>
+</body>
+
+</html>

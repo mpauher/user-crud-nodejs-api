@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Register</title>
+    <link rel='stylesheet' href='/stylesheets/register.css' />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+
+<body>
+    <div id="app">
+        <div class="mainContainer">
+            <div class="superior">
+                <h1 class="title">Registro de Usuarios</h1>
+            </div>
+            <div class="Main">
+                <form method="post">
+                    <div class="parent">
+                        <div class="part">
+                            <label class="label" for="name">Ingrese su nombre:</label>
+                            <input class="input" placeholder="Juan, Maria, Johan" type="text" id="name" required
+                                class="inputs">
+                            <p id="nombre" style="color:#4cc9f0; display:none; font-size: 14px;">Completa el campo
+                                Nombre</p>
+                        </div>
+                        <div class="part">
+                            <label class="label" for="email">Ingrese su Correo Electronico:</label>
+                            <input class="input" placeholder="correo@correo.com" type="email" id="email" required
+                                class="inputs">
+                            <p id="correo" style="color:#4cc9f0; display:none; font-size: 14px;">Completa el campo Email
+                            </p>
+                        </div>
+                        <div class="part">
+                            <label class="label" for="edad">Ingrese su edad:</label>
+                            <input class="input" placeholder="18" type="number" id="edad" required class="inputs">
+                            <p id="edadcita" style="color:#4cc9f0; display:none; font-size: 14px;">Completa el campo
+                                Edad</p>
+                        </div>
+                    </div>
+                    <div class="button">
+                        <button type="submit" class="sendInformation">Guardar</button>
+                    </div>
+                </form>
+                <div class="footer-links">
+                    <a href="/list">Ver usuarios</a>
+                    <a href="/">Volver al inicio</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <script>
+        const nombrecito = document.querySelector("#nombre")
+        const correo = document.querySelector("#correo")
+        const edadcita = document.querySelector("#edadcita")
+
+        document.querySelector(".sendInformation").addEventListener("click", (e) => {
+            e.preventDefault()
+            const nombre = document.querySelector("#name")
+            const email = document.querySelector("#email")
+            const edad = document.querySelector("#edad")
+            let flag1 = false
+            let flag2 = false
+            let flag3 = false
+            let regExpEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/;
+
+            if (nombre.value == "") {
+                nombre.style.borderColor = "red";
+                nombrecito.style.display = 'block';
+                flag1 = false;
+            } else {
+                nombre.style.borderColor = "green";
+                nombrecito.style.display = 'none';
+                flag1 = true;
+            }
+
+            if (edad.value == "") {
+                edad.style.borderColor = "red";
+                edadcita.style.display = 'block';
+                flag2 = false;
+            } else {
+                flag2 = true;
+                edad.style.borderColor = "green";
+                edadcita.style.display = 'none';
+            }
+            if (regExpEmail.test(email.value)) {
+                email.style.borderColor = 'green';
+                flag3 = true;
+                correo.style.display = 'none';
+            } else {
+                flag3 = false;
+                correo.style.display = 'block';
+                email.style.borderColor = 'red';
+            }
+
+            if (flag1 && flag2 && flag3) {
+                const infoSave = {
+                    name: nombre.value,
+                    email: email.value,
+                    age: edad.value
+                }
+                fetch('/users/', {
+                        method: 'post',
+                        headers: {
+                            "Content-type": 'application/json'
+                        },
+                        body: JSON.stringify(infoSave)
+                    }).then((response) => {
+                        console.log(response.status)
+                        if (response.status == 500) {
+                            throw new Error('Uusario existente');
+                        }
+                        Swal.fire({
+                            position: 'top-end',
+                            icon: 'success',
+                            title: 'Usuario Creado Exitosamente',
+                            showConfirmButton: false,
+                            timer: 1500,
+                        }).then(function () {
+                            setTimeout(function () {
+                                window.location.href = "/register";
+                            }, 0);
+                        });
+                    })
+                    .catch((error) => {
+                        Swal.fire({
+                            position: 'top-end',
+                            icon: 'error',
+                            title: error.message,
+                            showConfirmButton: false,
+                            timer: 2500,
+                        })
+                    });
+                // alert('Created successfully')
+                // location = "/register"
+
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Completa todos los campos',
+                })
+            }
+        })
+    </script>
+</body>
+
+</html>
